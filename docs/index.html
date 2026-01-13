@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitSense Premium - Smart Fitness</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: white;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .screen {
+      padding: 32px 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+      border-radius: 0 0 50% 50%;
+      z-index: 0;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1F2937;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: #6B7280;
+      font-weight: 400;
+    }
+    
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .button {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 28px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .button-secondary {
+      background: #F9FAFB;
+      color: #1F2937;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .option-button {
+      background: #F9FAFB;
+      color: #1F2937;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+      font-size: 16px;
+    }
+    
+    .option-button:hover {
+      border-color: #6366F1;
+      transform: translateX(4px);
+    }
+    
+    .option-button.selected {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      transform: scale(1.02);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    
+    .hidden { display: none; }
+    
+    .status-card {
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+      color: white;
+    }
+    
+    .status-card.green {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    }
+    
+    .status-card.yellow {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    }
+    
+    .status-card.red {
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    }
+    
+    .status-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .status-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .status-message {
+      font-size: 17px;
+      opacity: 0.95;
+    }
+    
+    .activity-card {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .activity-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .activity-details {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .activity-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    
+    .activity-reason {
+      font-size: 15px;
+      opacity: 0.9;
+      font-style: italic;
+    }
+    
+    .emoji-options {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .emoji-button {
+      flex: 1;
+      background: #F9FAFB;
+      border: 3px solid transparent;
+      border-radius: 20px;
+      padding: 20px 12px;
+      font-size: 40px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .emoji-button:hover {
+      border-color: #6366F1;
+      transform: translateY(-4px);
+    }
+    
+    .emoji-button.selected {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      transform: scale(1.05);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .emoji-label {
+      font-size: 13px;
+      color: #6B7280;
+      font-weight: 600;
+    }
+    
+    .emoji-button.selected .emoji-label {
+      color: white;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: #F9FAFB;
+      border-radius: 10px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      transition: width 0.5s;
+    }
+    
+    .question-label {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1F2937;
+    }
+    
+    .timer-display {
+      font-size: 96px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    
+    .exercise-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #1F2937;
+    }
+    
+    .praise-card {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .praise-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .praise-text {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .suggestion-text {
+      font-size: 16px;
+      opacity: 0.95;
+    }
+    
+    .insight-card {
+      background: #F9FAFB;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+      border-left: 4px solid #6366F1;
+      transition: all 0.3s;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1F2937;
+    }
+    
+    .insight-card:hover {
+      transform: translateX(4px);
+    }
+    
+    .safety-section {
+      background: #F9FAFB;
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    
+    .safety-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1F2937;
+    }
+    
+    .safety-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .safety-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: #6B7280;
+      font-weight: 500;
+    }
+    
+    .safety-list li:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #10B981;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    
+    .footer {
+      margin-top: auto;
+      padding-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Onboarding Screen -->
+    <div id="onboarding" class="screen">
+      <div class="header">
+        <div class="logo">💪</div>
+        <h1 class="title">Welcome to FitSense</h1>
+        <p class="subtitle">Smart fitness for real people</p>
+      </div>
+      <div class="content">
+        <div class="card">
+          <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 700;">Are you under 18?</h3>
+          <div class="button-group">
+            <button class="button" onclick="startApp(true)">Yes (Teen Safety Mode ON)</button>
+            <button class="button button-secondary" onclick="startApp(false)">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goal Selection Screen -->
+    <div id="goal-selection" class="screen hidden">
+      <div class="header">
+        <h1 class="title">What matters to you?</h1>
+        <p class="subtitle">Choose what feels right today</p>
+      </div>
+      <div class="content">
+        <div class="button-group">
+          <button class="option-button" onclick="selectGoal('Energy', this)">
+            <div style="font-size: 24px; margin-bottom: 4px;">⚡</div>
+            <div style="font-weight: 600;">Energy</div>
+          </button>
+          <button class="option-button" onclick="selectGoal('Consistency', this)">
+            <div style="font-size: 24px; margin-bottom: 4px;">📅</div>
+            <div style="font-weight: 600;">Consistency</div>
+          </button>
+          <button class="option-button" onclick="selectGoal('Confidence', this)">
+            <div style="font-size: 24px; margin-bottom: 4px;">💫</div>
+            <div style="font-weight: 600;">Confidence</div>
+          </button>
+        </div>
+      </div>
+      <div class="footer">
+        <button class="button" id="continueBtn" disabled onclick="showScreen('daily-checkin')">Continue</button>
+      </div>
+    </div>
+
+    <!-- Daily Check-in Screen -->
+    <div id="daily-checkin" class="screen hidden">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+      </div>
+      <div class="header">
+        <h1 class="title">Daily Check-In</h1>
+        <p class="subtitle">Help us understand how you feel today</p>
+      </div>
+      <div class="content">
+        <div class="card">
+          <div class="question-label" id="questionLabel">How did you sleep?</div>
+          <div class="emoji-options" id="emojiOptions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Readiness Result Screen -->
+    <div id="readiness-result" class="screen hidden">
+      <div class="content">
+        <div class="status-card" id="statusCard">
+          <div class="status-icon" id="statusIcon"></div>
+          <div class="status-title" id="statusTitle"></div>
+          <div class="status-message" id="statusMessage"></div>
+        </div>
+        <button class="button" onclick="showScreen('smart-action')">See Today's Action</button>
+      </div>
+    </div>
+
+    <!-- Smart Action Screen -->
+    <div id="smart-action" class="screen hidden">
+      <div class="header">
+        <h1 class="title">Today's Smart Action</h1>
+        <p class="subtitle">Personalized just for you</p>
+      </div>
+      <div class="content">
+        <div class="activity-card" id="activityCard"></div>
+        <button class="button" id="startActivityBtn" onclick="showScreen('activity-player')">Start Activity</button>
+        <button class="button button-secondary" onclick="showScreen('weekly-insights')" style="margin-top: 12px;">View Weekly Insights</button>
+      </div>
+    </div>
+
+    <!-- Activity Player Screen -->
+    <div id="activity-player" class="screen hidden">
+      <div class="content">
+        <div style="text-align: center; padding: 60px 20px;">
+          <div class="timer-display" id="timerDisplay">5:00</div>
+          <div class="exercise-name" id="exerciseName"></div>
+          <div class="button-group">
+            <button class="button" id="playPauseBtn" onclick="toggleTimer()">▶️ Start</button>
+            <button class="button button-secondary" onclick="showScreen('post-activity')">Stop Anytime - That's Okay!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post Activity Screen -->
+    <div id="post-activity" class="screen hidden">
+      <div class="content">
+        <div class="praise-card">
+          <div class="praise-icon">🎉</div>
+          <div class="praise-text" id="praiseText"></div>
+          <div class="suggestion-text" id="suggestionText"></div>
+        </div>
+        <button class="button" onclick="showScreen('weekly-insights')">View Your Progress</button>
+        <button class="button button-secondary" onclick="location.reload()" style="margin-top: 12px;">Done for Today</button>
+      </div>
+    </div>
+
+    <!-- Weekly Insights Screen -->
+    <div id="weekly-insights" class="screen hidden">
+      <div class="header">
+        <h1 class="title">Your Weekly Insights</h1>
+        <p class="subtitle">What we learned together</p>
+      </div>
+      <div class="content">
+        <div class="insight-card">💡 You feel better on days you sleep well</div>
+        <div class="insight-card">💡 Light movement helps when you're sore</div>
+        <div class="insight-card">💡 You've shown up 4 days this week - that's amazing</div>
+        <div class="insight-card">💡 Your energy is highest in the mornings</div>
+        <div class="insight-card">💡 Rest days help you perform better</div>
+        <button class="button" onclick="showScreen('profile')" style="margin-top: 20px;">View Safety Settings</button>
+      </div>
+    </div>
+
+    <!-- Profile Screen -->
+    <div id="profile" class="screen hidden">
+      <div class="header">
+        <h1 class="title">Safety & Settings</h1>
+        <p class="subtitle">Your well-being comes first</p>
+      </div>
+      <div class="content">
+        <div class="safety-section" id="teenSafetySection" style="display: none;">
+          <div class="safety-title">🛡️ Teen Safety Mode Active</div>
+          <ul class="safety-list">
+            <li>No calorie counting</li>
+            <li>No supplement recommendations</li>
+            <li>No extreme workouts</li>
+            <li>Focus on health, not appearance</li>
+            <li>Rest is always encouraged</li>
+          </ul>
+        </div>
+        <div class="safety-section">
+          <div class="safety-title">Our Promise to You</div>
+          <ul class="safety-list">
+            <li>We never shame you</li>
+            <li>We never push through pain</li>
+            <li>We never promote fast results</li>
+            <li>Rest days are progress</li>
+            <li>Consistency over intensity</li>
+          </ul>
+        </div>
+        <button class="button" onclick="location.reload()">Back to Start</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let appData = {
+      isTeenMode: false,
+      goal: '',
+      checkIn: {},
+      readinessLevel: '',
+      currentActivity: null
+    };
+
+    let currentQuestion = 0;
+    let timerInterval = null;
+    let timeLeft = 300;
+    let isRunning = false;
+
+    const questions = [
+      { key: 'sleep', label: 'How did you sleep?', options: [
+        { emoji: '😴', label: 'Poor', value: 'poor' },
+        { emoji: '😊', label: 'Okay', value: 'okay' },
+        { emoji: '😄', label: 'Good', value: 'good' }
+      ]},
+      { key: 'energy', label: 'Energy level?', options: [
+        { emoji: '🔋', label: 'Low', value: 'low' },
+        { emoji: '⚡', label: 'Medium', value: 'medium' },
+        { emoji: '🚀', label: 'High', value: 'high' }
+      ]},
+      { key: 'mood', label: 'How are you feeling?', options: [
+        { emoji: '😊', label: 'Happy', value: 'happy' },
+        { emoji: '😐', label: 'Neutral', value: 'neutral' },
+        { emoji: '😔', label: 'Low', value: 'low' }
+      ]},
+      { key: 'soreness', label: 'Body soreness?', options: [
+        { emoji: '✨', label: 'None', value: 'none' },
+        { emoji: '💪', label: 'Light', value: 'light' },
+        { emoji: '😣', label: 'Heavy', value: 'heavy' }
+      ]},
+      { key: 'movement', label: 'Yesterday movement?', options: [
+        { emoji: '🎯', label: 'Yes', value: 'yes' },
+        { emoji: '🚶', label: 'A little', value: 'little' },
+        { emoji: '🛋️', label: 'No', value: 'no' }
+      ]}
+    ];
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function startApp(isTeenMode) {
+      appData.isTeenMode = isTeenMode;
+      if (isTeenMode) {
+        document.getElementById('teenSafetySection').style.display = 'block';
+      }
+      showScreen('goal-selection');
+    }
+
+    function selectGoal(goal, btn) {
+      appData.goal = goal;
+      document.querySelectorAll('#goal-selection .option-button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('continueBtn').disabled = false;
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionLabel').textContent = q.label;
+      
+      const optionsHtml = q.options.map(opt => `
+        <button class="emoji-button" onclick="answerQuestion('${opt.value}', this)">
+          <span>${opt.emoji}</span>
+          <span class="emoji-label">${opt.label}</span>
+        </button>
+      `).join('');
+      
+      document.getElementById('emojiOptions').innerHTML = optionsHtml;
+      
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function answerQuestion(value, btn) {
+      const q = questions[currentQuestion];
+      appData.checkIn[q.key] = value;
+      
+      document.querySelectorAll('#emojiOptions .emoji-button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      
+      setTimeout(() => {
+        if (currentQuestion < questions.length - 1) {
+          currentQuestion++;
+          renderQuestion();
+        } else {
+          calculateReadiness();
+          showScreen('readiness-result');
+        }
+      }, 500);
+    }
+
+    function calculateReadiness() {
+      let score = 0;
+      const c = appData.checkIn;
+      
+      if (c.sleep === 'good') score += 2;
+      if (c.sleep === 'okay') score += 1;
+      if (c.energy === 'high') score += 2;
+      if (c.energy === 'medium') score += 1;
+      if (c.mood === 'happy') score += 1;
+      if (c.soreness === 'none') score += 2;
+      if (c.soreness === 'light') score += 1;
+      if (c.movement === 'no') score += 1;
+
+      let level = 'green';
+      if (score <= 3) level = 'red';
+      else if (score <= 6) level = 'yellow';
+
+      appData.readinessLevel = level;
+
+      const messages = {
+        green: { icon: '🌟', title: 'Your body feels ready today', message: 'Great energy! Let\'s make the most of it.' },
+        yellow: { icon: '🌤️', title: 'Let\'s keep it light and easy', message: 'Your body needs gentle movement today.' },
+        red: { icon: '🌙', title: 'Rest helps you grow', message: 'Today still counts. Recovery is progress.' }
+      };
+
+      const msg = messages[level];
+      document.getElementById('statusCard').className = 'status-card ' + level;
+      document.getElementById('statusIcon').textContent = msg.icon;
+      document.getElementById('statusTitle').textContent = msg.title;
+      document.getElementById('statusMessage').textContent = msg.message;
+
+      generateRecommendation();
+    }
+
+    function generateRecommendation() {
+      const { readinessLevel, checkIn } = appData;
+      let rec;
+
+      if (readinessLevel === 'red') {
+        rec = { type: 'rest', title: 'Full Rest Day', duration: 'All day', intensity: 'None', reason: 'Your body needs recovery to come back stronger', emoji: '🌙' };
+      } else if (readinessLevel === 'yellow') {
+        if (checkIn.soreness === 'heavy') {
+          rec = { type: 'stretch', title: 'Gentle Stretching', duration: '10 minutes', intensity: 'Easy', reason: 'Light movement helps sore muscles recover', emoji: '🧘' };
+        } else {
+          rec = { type: 'walk', title: 'Easy Walk', duration: '15 minutes', intensity: 'Easy', reason: 'Fresh air and light movement boost your mood', emoji: '🚶' };
+        }
+      } else {
+        if (checkIn.movement === 'no') {
+          rec = { type: 'workout', title: 'Bodyweight Basics', duration: '15 minutes', intensity: 'Moderate', reason: 'Your body is ready for some movement', emoji: '💪' };
+        } else {
+          rec = { type: 'workout', title: 'Full Body Flow', duration: '20 minutes', intensity: 'Moderate', reason: 'You\'re feeling great - let\'s build on yesterday', emoji: '🔥' };
+        }
+      }
+
+      appData.currentActivity = rec;
+
+      document.getElementById('activityCard').innerHTML = `
+        <div style="font-size: 48px; margin-bottom: 12px;">${rec.emoji}</div>
+        <div class="activity-title">${rec.title}</div>
+        <div class="activity-details">
+          <div class="activity-detail"><span>⏱️</span><span>${rec.duration}</span></div>
+          <div class="activity-detail"><span>📊</span><span>${rec.intensity}</span></div>
+        </div>
+        <div class="activity-reason">${rec.reason}</div>
+      `;
+
+      if (rec.type === 'rest') {
+        document.getElementById('startActivityBtn').style.display = 'none';
+      } else {
+        document.getElementById('startActivityBtn').style.display = 'block';
+        document.getElementById('exerciseName').textContent = rec.title;
+      }
+
+      const praises = [
+        { text: 'Nice job showing up today', suggestion: 'Tomorrow will feel easier' },
+        { text: 'You did it! That\'s what matters', suggestion: 'Consistency beats intensity every time' },
+        { text: 'Every step counts', suggestion: 'Your body thanks you for moving' },
+        { text: 'You\'re building a healthy habit', suggestion: 'Keep this momentum going' }
+      ];
+      const praise = praises[Math.floor(Math.random() * praises.length)];
+      document.getElementById('praiseText').textContent = praise.text;
+      document.getElementById('suggestionText').textContent = praise.suggestion;
+    }
+
+    function toggleTimer() {
+      isRunning = !isRunning;
+      const btn = document.getElementById('playPauseBtn');
+      
+      if (isRunning) {
+        btn.textContent = '⏸️ Pause';
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showScreen('post-activity');
+          }
+        }, 1000);
+      } else {
+        btn.textContent = '▶️ Start';
+        clearInterval(timerInterval);
+      }
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      document.getElementById('timerDisplay').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Initialize first question
+    renderQuestion();
+  </script>
+</body>
+</html>
