@@ -3,48 +3,728 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=./premium.html">
-  <title>FitSense Premium - Redirecting...</title>
+  <title>FitSense Premium</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
       min-height: 100vh;
+    }
+    
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: white;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .screen {
+      padding: 32px 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+      border-radius: 0 0 50% 50%;
+      z-index: 0;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1F2937;
+      margin-bottom: 12px;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: #6B7280;
+    }
+    
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .button {
       background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
       color: white;
-      text-align: center;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 28px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .button-secondary {
+      background: #F9FAFB;
+      color: #1F2937;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .option-button {
+      background: #F9FAFB;
+      color: #1F2937;
+      border: 2px solid transparent;
+      border-radius: 20px;
       padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
     }
-    .loader {
+    
+    .option-button:hover {
+      border-color: #6366F1;
+      transform: translateX(4px);
+    }
+    
+    .option-button.selected {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      transform: scale(1.02);
+    }
+    
+    .status-card {
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .status-card.green {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+    }
+    
+    .status-card.yellow {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: white;
+    }
+    
+    .status-card.red {
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      color: white;
+    }
+    
+    .status-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .status-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .activity-card {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .activity-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .activity-details {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .activity-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 12px;
+    }
+    
+    .timer-display {
+      font-size: 96px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    
+    .exercise-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .emoji-options {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .emoji-button {
+      flex: 1;
+      background: #F9FAFB;
+      border: 3px solid transparent;
+      border-radius: 20px;
+      padding: 20px 12px;
+      font-size: 40px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .emoji-button:hover {
+      border-color: #6366F1;
+      transform: translateY(-4px);
+    }
+    
+    .emoji-button.selected {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      transform: scale(1.05);
+    }
+    
+    .emoji-button span:last-child {
+      font-size: 13px;
+      color: #6B7280;
+      font-weight: 600;
+    }
+    
+    .emoji-button.selected span:last-child {
+      color: white;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: #F9FAFB;
+      border-radius: 10px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      transition: width 0.5s;
+    }
+    
+    .question-label {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .praise-card {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    
+    .praise-icon {
       font-size: 64px;
-      animation: pulse 1.5s ease-in-out infinite;
+      margin-bottom: 16px;
     }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+    
+    .praise-text {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
-    h1 {
-      font-size: 32px;
-      margin: 20px 0 10px;
+    
+    .insight-card {
+      background: #F9FAFB;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+      border-left: 4px solid #6366F1;
+      transition: all 0.3s;
     }
-    p {
-      font-size: 16px;
-      opacity: 0.9;
+    
+    .insight-card:hover {
+      transform: translateX(4px);
+    }
+    
+    .safety-section {
+      background: #F9FAFB;
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    
+    .safety-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .safety-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .safety-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: #6B7280;
+      font-weight: 500;
+    }
+    
+    .safety-list li:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #10B981;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    
+    .footer {
+      margin-top: auto;
+      padding-top: 32px;
     }
   </style>
 </head>
 <body>
-  <div>
-    <div class="loader">💪</div>
-    <h1>Loading FitSense Premium...</h1>
-    <p>Redirecting you to the app</p>
-  </div>
-  <script>
-    setTimeout(() => {
-      window.location.href = './premium.html';
-    }, 500);
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [screen, setScreen] = useState('onboarding');
+      const [userData, setUserData] = useState({
+        isTeenMode: false,
+        goal: '',
+        checkIn: { sleep: '', energy: '', mood: '', soreness: '', movement: '' },
+        readinessLevel: '',
+        currentActivity: null
+      });
+
+      const OnboardingScreen = () => (
+        <div className="screen">
+          <div className="header">
+            <div className="logo">💪</div>
+            <h1 className="title">Welcome to FitSense</h1>
+            <p className="subtitle">Smart fitness for real people</p>
+          </div>
+          <div className="content">
+            <div className="card">
+              <h3 style={{ marginBottom: '16px', fontSize: '18px', fontWeight: '700' }}>Are you under 18?</h3>
+              <div className="button-group">
+                <button className="button" onClick={() => { setUserData({ ...userData, isTeenMode: true }); setScreen('goal-selection'); }}>
+                  Yes (Teen Safety Mode ON)
+                </button>
+                <button className="button button-secondary" onClick={() => { setUserData({ ...userData, isTeenMode: false }); setScreen('goal-selection'); }}>
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+      const GoalSelectionScreen = () => (
+        <div className="screen">
+          <div className="header">
+            <h1 className="title">What matters to you?</h1>
+            <p className="subtitle">Choose what feels right today</p>
+          </div>
+          <div className="content">
+            <div className="button-group">
+              {['Energy', 'Consistency', 'Confidence'].map(goal => (
+                <button key={goal} className={`option-button ${userData.goal === goal ? 'selected' : ''}`} onClick={() => setUserData({ ...userData, goal })}>
+                  <div style={{ fontSize: '24px', marginBottom: '4px' }}>
+                    {goal === 'Energy' ? '⚡' : goal === 'Consistency' ? '📅' : '💫'}
+                  </div>
+                  <div style={{ fontWeight: '600' }}>{goal}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="footer">
+            <button className="button" disabled={!userData.goal} onClick={() => setScreen('daily-checkin')}>Continue</button>
+          </div>
+        </div>
+      );
+
+      const DailyCheckInScreen = () => {
+        const [currentStep, setCurrentStep] = useState(0);
+        const questions = [
+          { key: 'sleep', label: 'How did you sleep?', options: [{ emoji: '😴', label: 'Poor', value: 'poor' }, { emoji: '😊', label: 'Okay', value: 'okay' }, { emoji: '😄', label: 'Good', value: 'good' }] },
+          { key: 'energy', label: 'Energy level?', options: [{ emoji: '🔋', label: 'Low', value: 'low' }, { emoji: '⚡', label: 'Medium', value: 'medium' }, { emoji: '🚀', label: 'High', value: 'high' }] },
+          { key: 'mood', label: 'How are you feeling?', options: [{ emoji: '😊', label: 'Happy', value: 'happy' }, { emoji: '😐', label: 'Neutral', value: 'neutral' }, { emoji: '😔', label: 'Low', value: 'low' }] },
+          { key: 'soreness', label: 'Body soreness?', options: [{ emoji: '✨', label: 'None', value: 'none' }, { emoji: '💪', label: 'Light', value: 'light' }, { emoji: '😣', label: 'Heavy', value: 'heavy' }] },
+          { key: 'movement', label: 'Yesterday movement?', options: [{ emoji: '🎯', label: 'Yes', value: 'yes' }, { emoji: '🚶', label: 'A little', value: 'little' }, { emoji: '🛋️', label: 'No', value: 'no' }] }
+        ];
+
+        const currentQuestion = questions[currentStep];
+        const progress = ((currentStep + 1) / questions.length) * 100;
+
+        const handleAnswer = (value) => {
+          const newCheckIn = { ...userData.checkIn, [currentQuestion.key]: value };
+          setUserData({ ...userData, checkIn: newCheckIn });
+          
+          if (currentStep < questions.length - 1) {
+            setCurrentStep(currentStep + 1);
+          } else {
+            let score = 0;
+            if (newCheckIn.sleep === 'good') score += 2;
+            if (newCheckIn.sleep === 'okay') score += 1;
+            if (newCheckIn.energy === 'high') score += 2;
+            if (newCheckIn.energy === 'medium') score += 1;
+            if (newCheckIn.mood === 'happy') score += 1;
+            if (newCheckIn.soreness === 'none') score += 2;
+            if (newCheckIn.soreness === 'light') score += 1;
+            if (newCheckIn.movement === 'no') score += 1;
+
+            let level = 'green';
+            if (score <= 3) level = 'red';
+            else if (score <= 6) level = 'yellow';
+
+            setUserData({ ...userData, checkIn: newCheckIn, readinessLevel: level });
+            setScreen('readiness-result');
+          }
+        };
+
+        return (
+          <div className="screen">
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+            <div className="header">
+              <h1 className="title">Daily Check-In</h1>
+              <p className="subtitle">Help us understand how you feel today</p>
+            </div>
+            <div className="content">
+              <div className="card">
+                <div className="question-label">{currentQuestion.label}</div>
+                <div className="emoji-options">
+                  {currentQuestion.options.map(option => (
+                    <button key={option.value} className={`emoji-button ${userData.checkIn[currentQuestion.key] === option.value ? 'selected' : ''}`} onClick={() => handleAnswer(option.value)}>
+                      <span>{option.emoji}</span>
+                      <span>{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const ReadinessResultScreen = () => {
+        const messages = {
+          green: { icon: '🌟', title: 'Your body feels ready today', message: 'Great energy! Let\'s make the most of it.' },
+          yellow: { icon: '🌤️', title: 'Let\'s keep it light and easy', message: 'Your body needs gentle movement today.' },
+          red: { icon: '🌙', title: 'Rest helps you grow', message: 'Today still counts. Recovery is progress.' }
+        };
+        const current = messages[userData.readinessLevel];
+
+        return (
+          <div className="screen">
+            <div className="content">
+              <div className={`status-card ${userData.readinessLevel}`}>
+                <div className="status-icon">{current.icon}</div>
+                <div className="status-title">{current.title}</div>
+                <div className="status-message">{current.message}</div>
+              </div>
+              <button className="button" onClick={() => setScreen('smart-action')}>See Today's Action</button>
+            </div>
+          </div>
+        );
+      };
+
+      const SmartActionScreen = () => {
+        const getRecommendation = () => {
+          const { readinessLevel, checkIn } = userData;
+          
+          if (readinessLevel === 'red') {
+            return { type: 'rest', title: 'Full Rest Day', duration: 'All day', intensity: 'None', reason: 'Your body needs recovery to come back stronger', emoji: '🌙' };
+          }
+          
+          if (readinessLevel === 'yellow') {
+            if (checkIn.soreness === 'heavy') {
+              return { type: 'stretch', title: 'Gentle Stretching', duration: '10 minutes', intensity: 'Easy', reason: 'Light movement helps sore muscles recover', emoji: '🧘' };
+            }
+            return { type: 'walk', title: 'Easy Walk', duration: '15 minutes', intensity: 'Easy', reason: 'Fresh air and light movement boost your mood', emoji: '🚶' };
+          }
+          
+          if (checkIn.movement === 'no') {
+            return { type: 'workout', title: 'Bodyweight Basics', duration: '15 minutes', intensity: 'Moderate', reason: 'Your body is ready for some movement', emoji: '💪' };
+          }
+          
+          return { type: 'workout', title: 'Full Body Flow', duration: '20 minutes', intensity: 'Moderate', reason: 'You\'re feeling great - let\'s build on yesterday', emoji: '🔥' };
+        };
+
+        const recommendation = getRecommendation();
+
+        return (
+          <div className="screen">
+            <div className="header">
+              <h1 className="title">Today's Smart Action</h1>
+              <p className="subtitle">Personalized just for you</p>
+            </div>
+            <div className="content">
+              <div className="activity-card">
+                <div style={{ fontSize: '48px', marginBottom: '12px' }}>{recommendation.emoji}</div>
+                <div className="activity-title">{recommendation.title}</div>
+                <div className="activity-details">
+                  <div className="activity-detail"><span>⏱️</span><span>{recommendation.duration}</span></div>
+                  <div className="activity-detail"><span>📊</span><span>{recommendation.intensity}</span></div>
+                </div>
+                <div className="activity-reason">{recommendation.reason}</div>
+              </div>
+              
+              {recommendation.type !== 'rest' && (
+                <button className="button" onClick={() => { setUserData({ ...userData, currentActivity: recommendation }); setScreen('activity-player'); }}>
+                  Start Activity
+                </button>
+              )}
+              
+              <button className="button button-secondary" onClick={() => setScreen('weekly-insights')} style={{ marginTop: '12px' }}>
+                View Weekly Insights
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      const ActivityPlayerScreen = () => {
+        const [timeLeft, setTimeLeft] = useState(300);
+        const [isRunning, setIsRunning] = useState(false);
+        const activity = userData.currentActivity;
+
+        useEffect(() => {
+          let interval;
+          if (isRunning && timeLeft > 0) {
+            interval = setInterval(() => setTimeLeft(time => time - 1), 1000);
+          } else if (timeLeft === 0) {
+            setScreen('post-activity');
+          }
+          return () => clearInterval(interval);
+        }, [isRunning, timeLeft]);
+
+        const formatTime = (seconds) => {
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          return `${mins}:${secs.toString().padStart(2, '0')}`;
+        };
+
+        return (
+          <div className="screen">
+            <div className="content">
+              <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                <div className="timer-display">{formatTime(timeLeft)}</div>
+                <div className="exercise-name">{activity?.title}</div>
+                <div className="button-group">
+                  <button className="button" onClick={() => setIsRunning(!isRunning)}>
+                    {isRunning ? '⏸️ Pause' : '▶️ Start'}
+                  </button>
+                  <button className="button button-secondary" onClick={() => setScreen('post-activity')}>
+                    Stop Anytime - That's Okay!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const PostActivityScreen = () => {
+        const praises = [
+          { text: 'Nice job showing up today', suggestion: 'Tomorrow will feel easier' },
+          { text: 'You did it! That\'s what matters', suggestion: 'Consistency beats intensity every time' },
+          { text: 'Every step counts', suggestion: 'Your body thanks you for moving' },
+          { text: 'You\'re building a healthy habit', suggestion: 'Keep this momentum going' }
+        ];
+        const praise = praises[Math.floor(Math.random() * praises.length)];
+
+        return (
+          <div className="screen">
+            <div className="content">
+              <div className="praise-card">
+                <div className="praise-icon">🎉</div>
+                <div className="praise-text">{praise.text}</div>
+                <div className="suggestion-text">{praise.suggestion}</div>
+              </div>
+              <button className="button" onClick={() => setScreen('weekly-insights')}>View Your Progress</button>
+              <button className="button button-secondary" onClick={() => setScreen('daily-checkin')} style={{ marginTop: '12px' }}>Done for Today</button>
+            </div>
+          </div>
+        );
+      };
+
+      const WeeklyInsightsScreen = () => {
+        const insights = [
+          'You feel better on days you sleep well',
+          'Light movement helps when you\'re sore',
+          'You\'ve shown up 4 days this week - that\'s amazing',
+          'Your energy is highest in the mornings',
+          'Rest days help you perform better'
+        ];
+
+        return (
+          <div className="screen">
+            <div className="header">
+              <h1 className="title">Your Weekly Insights</h1>
+              <p className="subtitle">What we learned together</p>
+            </div>
+            <div className="content">
+              {insights.map((insight, index) => (
+                <div key={index} className="insight-card">
+                  <div style={{ fontSize: '16px', fontWeight: '500' }}>💡 {insight}</div>
+                </div>
+              ))}
+              <button className="button" onClick={() => setScreen('profile')} style={{ marginTop: '20px' }}>View Safety Settings</button>
+            </div>
+          </div>
+        );
+      };
+
+      const ProfileScreen = () => (
+        <div className="screen">
+          <div className="header">
+            <h1 className="title">Safety & Settings</h1>
+            <p className="subtitle">Your well-being comes first</p>
+          </div>
+          <div className="content">
+            {userData.isTeenMode && (
+              <div className="safety-section">
+                <div className="safety-title">🛡️ Teen Safety Mode Active</div>
+                <ul className="safety-list">
+                  <li>No calorie counting</li>
+                  <li>No supplement recommendations</li>
+                  <li>No extreme workouts</li>
+                  <li>Focus on health, not appearance</li>
+                  <li>Rest is always encouraged</li>
+                </ul>
+              </div>
+            )}
+            <div className="safety-section">
+              <div className="safety-title">Our Promise to You</div>
+              <ul className="safety-list">
+                <li>We never shame you</li>
+                <li>We never push through pain</li>
+                <li>We never promote fast results</li>
+                <li>Rest days are progress</li>
+                <li>Consistency over intensity</li>
+              </ul>
+            </div>
+            <button className="button" onClick={() => setScreen('daily-checkin')}>Back to Check-In</button>
+          </div>
+        </div>
+      );
+
+      const renderScreen = () => {
+        switch (screen) {
+          case 'onboarding': return <OnboardingScreen />;
+          case 'goal-selection': return <GoalSelectionScreen />;
+          case 'daily-checkin': return <DailyCheckInScreen />;
+          case 'readiness-result': return <ReadinessResultScreen />;
+          case 'smart-action': return <SmartActionScreen />;
+          case 'activity-player': return <ActivityPlayerScreen />;
+          case 'post-activity': return <PostActivityScreen />;
+          case 'weekly-insights': return <WeeklyInsightsScreen />;
+          case 'profile': return <ProfileScreen />;
+          default: return <OnboardingScreen />;
+        }
+      };
+
+      return <div className="app">{renderScreen()}</div>;
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
