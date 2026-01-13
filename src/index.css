@@ -1,0 +1,381 @@
+:root {
+  --primary: #6B9BD1;
+  --secondary: #A8D5BA;
+  --accent: #F4C2A8;
+  --bg: #F8F9FA;
+  --text: #2C3E50;
+  --text-light: #7F8C8D;
+  --green: #52C41A;
+  --yellow: #FAAD14;
+  --red: #FF7875;
+  --white: #FFFFFF;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--white);
+  box-shadow: 0 0 20px var(--shadow);
+}
+
+.screen {
+  padding: 24px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.button {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-secondary {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-button {
+  background: var(--bg);
+  color: var(--text);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.option-button:hover {
+  border-color: var(--primary);
+}
+
+.option-button.selected {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+.status-card {
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.status-card.green {
+  background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
+  color: var(--white);
+}
+
+.status-card.yellow {
+  background: linear-gradient(135deg, #FAAD14 0%, #FFC53D 100%);
+  color: var(--white);
+}
+
+.status-card.red {
+  background: linear-gradient(135deg, #FF7875 0%, #FFA39E 100%);
+  color: var(--white);
+}
+
+.status-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.status-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.status-message {
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.activity-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: var(--white);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.activity-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.activity-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.activity-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.activity-reason {
+  font-size: 14px;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.timer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.timer-display {
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+.exercise-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: var(--text);
+}
+
+.insight-card {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.insight-text {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.safety-section {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.safety-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.safety-list {
+  list-style: none;
+  padding: 0;
+}
+
+.safety-list li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+  color: var(--text-light);
+}
+
+.safety-list li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.question-label {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.emoji-options {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.emoji-button {
+  flex: 1;
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 16px 8px;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.emoji-button span:last-child {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.emoji-button:hover {
+  border-color: var(--primary);
+}
+
+.emoji-button.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.emoji-button.selected span:last-child {
+  color: var(--white);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--bg);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.praise-card {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  color: var(--white);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.praise-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.praise-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.suggestion-text {
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+@media (max-width: 480px) {
+  .screen {
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .timer-display {
+    font-size: 56px;
+  }
+}
