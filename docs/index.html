@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=./premium.html">
+  <title>FitSense Premium - Redirecting...</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .loader {
+      font-size: 64px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    h1 {
+      font-size: 32px;
+      margin: 20px 0 10px;
+    }
+    p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="loader">💪</div>
+    <h1>Loading FitSense Premium...</h1>
+    <p>Redirecting you to the app</p>
+  </div>
+  <script>
+    setTimeout(() => {
+      window.location.href = './premium.html';
+    }, 500);
+  </script>
+</body>
+</html>
